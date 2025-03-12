@@ -13,19 +13,11 @@ function setup() {
 	cnv = new Canvas(windowWidth-4 , windowHeight-4);
 	preload();
 	
-	
-	
-	
-}
-	
-/*******************************************************/
-// draw()
-/*******************************************************/
-function draw() {
 	if(gameState == "intro") {
 		background('#0e001b');
 		startImage = new Sprite(900, 400, 200, 400, 's');
 		startImage.image = startText; 
+		
 
 		
 
@@ -34,7 +26,32 @@ function draw() {
 
 	}
 	else if(gameState == "play") {
-		startImage.remove();
+		startImage = null;
+	}
+	else if(gameState == "lose") {
+	
+	
+	
+ }
+}
+	
+/*******************************************************/
+// draw()
+/*******************************************************/
+function draw() {
+	if(gameState == "intro") {
+		background('#0e001b');
+		
+		
+
+		
+
+
+
+
+	}
+	else if(gameState == "play") {
+		startImage = null;
 	}
 	else if(gameState == "lose") {
 
