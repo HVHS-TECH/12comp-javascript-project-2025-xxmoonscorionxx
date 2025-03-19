@@ -10,15 +10,16 @@ var startText;
 var clickedCounter = 0;
 const clickedCounterIncrease = 0.5;
 var spaceShipSpawned = false;
-var astroidSpawningChance = 0;
-var astroidSpawingLocationY = 0;
-world.gravity = 0
+var asteroidSpawningChance = 0;
+const asteroidSpawningChanceParameter = 4
+var asteroidSpawingLocationY = 0;
+var borderSpawned = false
 /*******************************************************/
 function setup() {
 	console.log("setup: ");
 	cnv = new Canvas(windowWidth-4 , windowHeight-4);
 	preload();	
-	astroidGroup = new Group();
+	asteroidGroup = new Group();
 		if(gameState == "intro") {
 			background('#0e001b');
 			startImage = new Sprite(900, 400, 200, 400, 's');
@@ -51,16 +52,22 @@ function draw() {
 			console.log("ITS HAPPENING")
 		}
 		Spaceship.rotationSpeed = 0;
-		Spaceship.rotatiom = 0;
+		Spaceship.rotation = 0;
 		spaceshipMovement()	
 
-		//* Coding for Astroids*//
-		astroidSpawningChance = random(1,100);
-		astroidSpawingLocationY = random(1,windowHeight);
-		if(2>astroidSpawningChance) {
-			astroid = new Sprite(windowWidth+20,astroidSpawingLocationY, 200, 'k')
-			astroid.vel.x = -10;
-			
+		//** Coding for Borders **/
+		if(borderSpawned == false) {
+			Borders();
+			borderSpawned = true
+		}
+
+		//* Coding for Asteroid*//
+		asteroidSpawningChance = random(1,100);
+		asteroidSpawingLocationY = random(1,windowHeight);
+		if(asteroidSpawningChanceParameter>asteroidSpawningChance) {
+			asteroid = new Sprite(windowWidth+20,asteroidSpawingLocationY, 200, 'd')
+			asteroidGroup.add(asteroid)
+			asteroid.vel.x = -10;
 		}
 		
 		
@@ -122,6 +129,27 @@ if (kb.released('up')) {
 else if (kb.released('down')) {
 	Spaceship.vel.y = 0;
 }
+}
+
+/**SpawnBorders**/
+/**MUST REMEMBER TO CHANGE BACK TO NORMAL**/
+function borders() {
+	// north wall 
+	Utopia = new Sprite(windowWidth/2, 0, windowWidth, 3, 's' )
+	Utopia.color = 'red'
+
+	// south wall
+	Trost = new Sprite(windowWidth/2, windowHeight, windowWidth, 3, 's' )
+	Trost.color = 'red'
+	
+	// west wall
+	Yarckel = new Sprite(-400, windowHeight/2, 3, windowHeight, 's' )
+	Yarckel.color = 'red'
+
+	
+
+
+
 }
 
 
