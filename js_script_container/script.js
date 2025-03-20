@@ -1,6 +1,7 @@
 /*******************************************************/
-/// My Game   Far Lands
- ///
+// My Game   Far Lands
+// Written by William Kan
+// Date: who knows its been too long help
 /*******************************************************/
 /*******************************************************/
 // setup()
@@ -9,7 +10,7 @@ var startImage;
 var startText;
 var clickedCounter = 0;
 const clickedCounterIncrease = 0.5;
-var spaceShipSpawned = false;
+var spaceshipSpawned = false;
 var asteroidSpawningChance = 0;
 const asteroidSpawningChanceParameter = 4
 var asteroidSpawingLocationY = 0;
@@ -36,6 +37,12 @@ function setup() {
 // draw()
 /*******************************************************/
 function draw() {
+	playState();
+}
+/*******************************************************/
+// functions()
+/*******************************************************/
+function playState() {
 	if(gameState == "intro") {
 		background('#0e001b');
 		if(clickedCounter == 1) {
@@ -45,19 +52,19 @@ function draw() {
 	}
 	else if(gameState == "play") {
 		background('#0e001b');
-		//* Coding for the Spaceship*//
-		if(spaceShipSpawned == false) {
-			Spaceship  = new Sprite(200, 400, 100, 40, 'd');
-			spaceShipSpawned = true;
+		//* Coding for the spaceship*//
+		if(spaceshipSpawned == false) {
+			spaceship  = new Sprite(200, 400, 100, 40, 'd');
+			spaceshipSpawned = true;
 			console.log("ITS HAPPENING")
 		}
-		Spaceship.rotationSpeed = 0;
-		Spaceship.rotation = 0;
+		spaceship.rotationSpeed = 0;
+		spaceship.rotation = 0;
 		spaceshipMovement()	
 
 		//** Coding for Borders **/
 		if(borderSpawned == false) {
-			Borders();
+			borders();
 			borderSpawned = true
 		}
 
@@ -69,15 +76,14 @@ function draw() {
 			asteroidGroup.add(asteroid)
 			asteroid.vel.x = -10;
 		}
+		asteroidDeleteParameter();
+		spaceshipCrashes();
 		
 		
 	}
 	else if(gameState == "lose") {
 	}
 }
-/*******************************************************/
-// functions()
-/*******************************************************/
 function preload() {
 	startText = loadImage('assets/start_image.png');
 }
@@ -91,66 +97,95 @@ function mousePressed() {
 }
 
 /**************************************************** *
- // MOVEMENT OF THE SPACESHIP
+ // MOVEMENT OF THE spaceship
 *******************************************************/
 //** 
 function spaceshipMovement() {
 if (kb.pressing('left')) {
-	Spaceship.vel.x = -7;
+	spaceship.vel.x = -7;
 
 }
 
 else if (kb.pressing ('right')) {
-	Spaceship.vel.x = 7;  
+	spaceship.vel.x = 7;  
 
 }
 
 if (kb.released('left')) {
-	Spaceship.vel.x = 0;
+	spaceship.vel.x = 0;
 
 }
 
 else if (kb.released('right')) {
-	Spaceship.vel.x = 0;
+	spaceship.vel.x = 0;
 }
 if (kb.pressing('up')) {
-	Spaceship.vel.y = -7;
+	spaceship.vel.y = -7;
 
 }
 else if(kb.pressing('down')) {
-	Spaceship.vel.y = 7;
+	spaceship.vel.y = 7;
 }
 if (kb.released('up')) {
 
-	Spaceship.vel.y = 0;
+	spaceship.vel.y = 0;
 
 }
 
 else if (kb.released('down')) {
-	Spaceship.vel.y = 0;
+	spaceship.vel.y = 0;
 }
+}
+function asteroidMovement() {
+	asteroid.vel.x = -10;
+	asteroid.vel.y = 0
 }
 
 /**SpawnBorders**/
 /**MUST REMEMBER TO CHANGE BACK TO NORMAL**/
 function borders() {
 	// north wall 
-	Utopia = new Sprite(windowWidth/2, 0, windowWidth, 3, 's' )
-	Utopia.color = 'red'
+	north = new Sprite(windowWidth/2, 0, windowWidth, 3, 's' )
+	north.color = 'red'
 
 	// south wall
-	Trost = new Sprite(windowWidth/2, windowHeight, windowWidth, 3, 's' )
-	Trost.color = 'red'
+	south = new Sprite(windowWidth/2, windowHeight, windowWidth, 3, 's' )
+	south.color = 'red'
 	
 	// west wall
-	Yarckel = new Sprite(-400, windowHeight/2, 3, windowHeight, 's' )
-	Yarckel.color = 'red'
+	west = new Sprite(-400, windowHeight/2, 3, windowHeight, 's' )
+	west.color = 'red'
 
 	
 
 
 
 }
+
+
+// Checking if the asteroid has collided with the west wall
+function asteroidDeleteParameter() {
+	asteroidGroup.collides(west,asteroidDelete);
+}
+//
+function asteroidDelete(_west,_asteroid) {
+	_asteroid.remove();
+	console.log("contact made")
+}
+
+// Checking if the spaceship has crashed into the asteroid
+function spaceshipCrashes() {
+	asteroidGroup.collides(spaceship,spaceshipHit);
+}
+// spaceship has crashed into an asteroid and the asteroid gets removed
+function spaceshipHit(_asteroid,_spaceship) {
+	_asteroid.remove();
+	console.log("contact made")
+}
+
+
+
+
 
 
 
