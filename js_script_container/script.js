@@ -5,28 +5,44 @@
 /*******************************************************/
 /*******************************************************/
 // setup()
+
+
+
+
+
+/*******************************************************/
+//var container
+/*******************************************************/
 var gameState = "intro";
 var startImage;
 var startText;
 var clickedCounter = 0;
-const clickedCounterIncrease = 0.5;
+var asteroidSpawingLocationY = 0;
+var borderSpawned = false;
 var spaceshipSpawned = false;
 var asteroidSpawningChance = 0;
+var coinSpawningChance = 0;
+/*******************************************************/
+//const container
+/*******************************************************/
 const asteroidSpawningChanceParameter = 4
-var asteroidSpawingLocationY = 0;
-var borderSpawned = false
+const asteroidSpeed = -10;
+const asteroidGoesStraight = 0;
+const clickedCounterIncrease = 0.5;
+const coinSpawningChanceParameter = 4
+
 /*******************************************************/
 function setup() {
 	console.log("setup: ");
 	cnv = new Canvas(windowWidth-4 , windowHeight-4);
-	preload();	
 	asteroidGroup = new Group();
-		if(gameState == "intro") {
+	coinGroup = new Group();
+	if(gameState == "intro") {
 			background('#0e001b');
 			startImage = new Sprite(900, 400, 200, 400, 's');
 			startImage.image = startText; 
 		}
-		else if(gameState == "play") {
+	else if(gameState == "play") {
 			startImage = null;
 		}
 	else if(gameState == "lose") {	
@@ -46,7 +62,7 @@ function playState() {
 	if(gameState == "intro") {
 		background('#0e001b');
 		if(clickedCounter == 1) {
-			startImage.remove()
+			startImage.remove();
 			gameState = "play"
 		}
 	}
@@ -60,7 +76,7 @@ function playState() {
 		}
 		spaceship.rotationSpeed = 0;
 		spaceship.rotation = 0;
-		spaceshipMovement()	
+		spaceshipMovement();
 
 		//** Coding for Borders **/
 		if(borderSpawned == false) {
@@ -74,10 +90,11 @@ function playState() {
 		if(asteroidSpawningChanceParameter>asteroidSpawningChance) {
 			asteroid = new Sprite(windowWidth+20,asteroidSpawingLocationY, 200, 'd')
 			asteroidGroup.add(asteroid)
-			asteroid.vel.x = -10;
+			asteroidMovement();
 		}
 		asteroidDeleteParameter();
 		spaceshipCrashes();
+		spawnCoin();
 		
 		
 	}
@@ -103,17 +120,14 @@ function mousePressed() {
 function spaceshipMovement() {
 if (kb.pressing('left')) {
 	spaceship.vel.x = -7;
-
 }
 
 else if (kb.pressing ('right')) {
 	spaceship.vel.x = 7;  
-
 }
 
 if (kb.released('left')) {
 	spaceship.vel.x = 0;
-
 }
 
 else if (kb.released('right')) {
@@ -127,9 +141,7 @@ else if(kb.pressing('down')) {
 	spaceship.vel.y = 7;
 }
 if (kb.released('up')) {
-
 	spaceship.vel.y = 0;
-
 }
 
 else if (kb.released('down')) {
@@ -155,11 +167,6 @@ function borders() {
 	// west wall
 	west = new Sprite(-400, windowHeight/2, 3, windowHeight, 's' )
 	west.color = 'red'
-
-	
-
-
-
 }
 
 
@@ -182,10 +189,40 @@ function spaceshipHit(_asteroid,_spaceship) {
 	_asteroid.remove();
 	console.log("contact made")
 }
+// Speed of the asteroid
+function asteroidMovement() {
+	asteroid.vel.y = asteroidGoesStraight;
+	asteroid.vel.x = asteroidSpeed;
+}
+/*****************************************************/
+// spawnCoin()
+// Called by the draw loop
+// Spawns the coins
+// Input: N/A
+// Returns: N/A
+// chatgpt used to find the error
+/*****************************************************/
 
-
-
-
+function spawnCoin() {
+	coinSpawningChance = random(1,100);
+	coinSpawingLocationY = random(1,windowHeight);
+	if(coinSpawningChanceParameter>coinSpawningChance) {
+		coin = new Sprite(windowWidth+20, coinSpawingLocationY, 20, 'k' )
+		coinGroup.add(coin);
+		coinMovement();
+	}
+	
+}
+/*****************************************************/
+// coinMovement()
+// Called by the spawnCoin()
+// sets the speed for the coins
+// Input: N/A
+// Returns: N/A
+/*****************************************************/
+function coinMovement() {
+	coin.vel.x = -10;
+}
 
 
 
