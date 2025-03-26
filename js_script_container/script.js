@@ -26,6 +26,7 @@ var asteroidSpawned = false;
 var score = 0;
 var lives = 5
 var checkLives = true
+var coinSpawingLocationY;
 /*******************************************************/
 //const container
 /*******************************************************/
@@ -33,7 +34,7 @@ const asteroidSpawningChanceParameter = 4
 const asteroidSpeed = -10;
 const asteroidGoesStraight = 0;
 const clickedCounterIncrease = 0.5;
-const coinSpawningChanceParameter = 1
+const coinSpawningChanceParameter = 2;
 
 /*******************************************************/
 function setup() {
@@ -48,6 +49,7 @@ function setup() {
 		}
 	else if(gameState == "play") {
 			startImage = null;
+			gameStateChanger();
 		}
 	else if(gameState == "lose") {	
  }
@@ -71,14 +73,10 @@ function playState() {
 		}
 	}
 	else if(gameState == "play") {
-		while(checkLives) {
-			if (lives <= 0) {
-				gameState = "lose";
-			}
-		}
+		
 		background('#0e001b');
 		//* Coding for the spaceship*//
-		gui();
+		info();
 		if(spaceshipSpawned == false) {
 			spaceship  = new Sprite(200, 400, 100, 40, 'd');
 			spaceshipSpawned = true;
@@ -110,12 +108,14 @@ function playState() {
 		spaceshipCrashesAsteroid();
 		spawnCoin();
 		spaceshipTouchesCoin();
+
 		
 
 		
 		
 	}
 	else if(gameState == "lose") {
+		
 	}
 }
 function preload() {
@@ -166,8 +166,8 @@ else if (kb.released('down')) {
 }
 }
 function asteroidMovement() {
-	asteroidGroup.vel.x = -10;
-	asteroidGroup.vel.y = 0
+	asteroidGroup.vel.x = asteroidSpeed;
+	asteroidGroup.vel.y = asteroidGoesStraight;
 }
 
 /**SpawnBorders**/
@@ -205,7 +205,7 @@ function spaceshipCrashesAsteroid() {
 function spaceshipHit(_asteroid,_spaceship) {
 	_asteroid.remove();
 	console.log("contact made");
-	lives = lives--
+	lives--
 }
 function spaceshipTouchesCoin() {
 	coinGroup.collides(spaceship,spaceshipCollectCoin);
@@ -214,12 +214,7 @@ function spaceshipTouchesCoin() {
 function spaceshipCollectCoin(_coin,_spaceship) {
 	_coin.remove();
 	console.log("coin collected");
-	score = score++
-}
-// Speed of the asteroid
-function asteroidMovement() {
-	asteroid.vel.y = asteroidGoesStraight;
-	asteroid.vel.x = asteroidSpeed;
+	score++
 }
 /*****************************************************/
 // spawnCoin()
@@ -229,14 +224,15 @@ function asteroidMovement() {
 // Returns: N/A
 // chatgpt used to find the error
 /*****************************************************/
-
 function spawnCoin() {
 	coinSpawningChance = random(1,100);
 	coinSpawingLocationY = random(1,windowHeight);
 	if(coinSpawningChanceParameter>coinSpawningChance) {
 		coin = new Sprite(windowWidth+20, coinSpawingLocationY, 20, 'k' )
+		console.log("coin spawned");
 		coinGroup.add(coin);
 		coinMovement();
+		
 	}
 	
 }
@@ -258,13 +254,31 @@ function coinMovement() {
 // Input: N/A
 // Returns: N/A
 /*****************************************************/
-function collisions() {
 
-}
-function gui() {
+function info() {
 	fill("#cbc83c");
-	text(lives, 50, 50);
-	text(score, 50, 100);
+	text("Lives " + lives, 50, 50);
+	text("Score " + score, 50, 100);
+}
+
+
+/*****************************************************/
+// collisions();
+// Called by the draw loop
+// Detects when sprites collide and executes code to delete
+// the sprite and change another variable
+// code for the for loop itself taken from https://flexiple.com/javascript/infinite-loops-javascript
+// Input: N/A
+// Returns: N/A
+/*****************************************************/
+function gameStateChanger() {
+	for (var i = 0; i < Infinity; i++) {
+		console.log("u check");
+		if(lives <= 0) {
+			gameState = lose;
+			console.log("u lost");
+		}
+}
 }
 
 
