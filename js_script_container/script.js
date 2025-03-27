@@ -30,7 +30,7 @@ var coinSpawingLocationY;
 /*******************************************************/
 //const container
 /*******************************************************/
-const asteroidSpawningChanceParameter = 4
+const asteroidSpawningChanceParameter = 40
 const asteroidSpeed = -10;
 const asteroidGoesStraight = 0;
 const clickedCounterIncrease = 0.5;
@@ -236,6 +236,7 @@ function spawnCoin() {
 	}
 	
 }
+
 /*****************************************************/
 // coinMovement()
 // Called by the spawnCoin()
@@ -246,6 +247,7 @@ function spawnCoin() {
 function coinMovement() {
 	coinGroup.vel.x = -10;
 }
+
 /*****************************************************/
 // collisions();
 // Called by the draw loop
@@ -254,7 +256,6 @@ function coinMovement() {
 // Input: N/A
 // Returns: N/A
 /*****************************************************/
-
 function info() {
 	fill("#cbc83c");
 	text("Lives " + lives, 50, 50);
@@ -280,16 +281,6 @@ function gameStateChanger() {
 		}
 }
 }
-
-
-
-
-
-
-
-
-
-
 /**************************************************** *
 *******************************************************/
 //  END OF APP
