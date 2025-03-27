@@ -27,6 +27,7 @@ var score = 0;
 var lives = 5
 var checkLives = true
 var coinSpawingLocationY;
+var gameStateChanged = 0;
 /*******************************************************/
 //const container
 /*******************************************************/
@@ -50,6 +51,9 @@ function setup() {
 	else if(gameState == "play") {
 			startImage = null;
 			gameStateChanger();
+			
+			
+			
 		}
 	else if(gameState == "lose") {	
  }
@@ -272,13 +276,18 @@ function info() {
 // Input: N/A
 // Returns: N/A
 /*****************************************************/
-function gameStateChanger() {
-	for (var i = 0; i < Infinity; i++) {
-		console.log("u check");
-		if(lives <= 0) {
-			gameState = lose;
-			console.log("u lost");
-		}
+
+
+	function gameStateChanger() {
+		if(gameStateChanged<1) {
+		for (var i = 0; i < Infinity; i++) {
+			console.log("u check");
+			if(lives <= 0) {
+				gameState = lose;
+				console.log("u lost");
+				gameStateChanged =1;
+			}
+	}
 }
 }
 /**************************************************** *
