@@ -30,7 +30,7 @@ var coinSpawingLocationY;
 /*******************************************************/
 //const container
 /*******************************************************/
-const asteroidSpawningChanceParameter = 40
+const asteroidSpawningChanceParameter = 4;
 const asteroidSpeed = -10;
 const asteroidGoesStraight = 0;
 const clickedCounterIncrease = 0.5;
