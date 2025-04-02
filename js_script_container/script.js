@@ -4,38 +4,36 @@
 // Date: who knows its been too long help
 /*******************************************************/
 /*******************************************************/
-// setup()
-
-
-
 
 
 /*******************************************************/
 //var container
 /*******************************************************/
-var gameState = "intro";
-var startImage;
-var startText;
-var clickedCounter = 0;
-var asteroidSpawingLocationY = 0;
-var borderSpawned = false;
-var spaceshipSpawned = false;
-var asteroidSpawningChance = 0;
-var coinSpawningChance = 0;
-var asteroidSpawned = false;
-var score = 0;
-var lives = 5
-var checkLives = true
-var coinSpawingLocationY;
-var gameStateChanged = 0;
+let gameState = "intro";
+let startImage;
+let startText;
+let clickedCounter = 0;
+let asteroidSpawingLocationY = 0;
+let borderSpawned = false;
+let spaceshipSpawned = false;
+let asteroidSpawningChance = 0;
+let coinSpawningChance = 0;
+let asteroidSpawned = false;
+let score = 0;
+let lives = 5
+let checkLives = true
+let coinSpawingLocationY;
+let gameStateChanged = 0;
+let particleMovementX;
+let particleMovementY;
 /*******************************************************/
 //const container
 /*******************************************************/
-const asteroidSpawningChanceParameter = 4;
-const asteroidSpeed = -10;
-const asteroidGoesStraight = 0;
-const clickedCounterIncrease = 0.5;
-const coinSpawningChanceParameter = 2;
+const ASTEROIDSPAWNINGCHANCEPARAMETER = 4;
+const ASTEROIDSPEED = -10;
+const ASTEROIDGOESSTRAIGHT = 0;
+const CLICKCOUNTERINCREASE = 0.5;
+const COINSPAWNINGCHANCEPARAMETER = 2;
 
 /*******************************************************/
 function setup() {
@@ -50,7 +48,7 @@ function setup() {
 		}
 	else if(gameState == "play") {
 			startImage = null;
-			gameStateChanger();
+			
 			
 			
 			
@@ -102,7 +100,7 @@ function playState() {
 		if(asteroidSpawned == true) {
 			asteroidMovement();
 		}
-		if(asteroidSpawningChanceParameter>asteroidSpawningChance) {
+		if(ASTEROIDSPAWNINGCHANCEPARAMETER>asteroidSpawningChance) {
 			asteroid = new Sprite(windowWidth+50,asteroidSpawingLocationY, 200, 'd')
 			asteroidGroup.add(asteroid)
 			asteroidSpawned = true;
@@ -112,6 +110,8 @@ function playState() {
 		spaceshipCrashesAsteroid();
 		spawnCoin();
 		spaceshipTouchesCoin();
+		gameStateChanger();
+		
 
 		
 
@@ -119,6 +119,8 @@ function playState() {
 		
 	}
 	else if(gameState == "lose") {
+		background('#0e001b');
+
 		
 	}
 }
@@ -129,7 +131,7 @@ function preload() {
 //**  This website helped https://processing.org/reference/mousePressed_.html**//
 function mousePressed() {
 	if(mousePressed) {
-		clickedCounter = clickedCounter+clickedCounterIncrease;
+		clickedCounter = clickedCounter+CLICKCOUNTERINCREASE;
 		console.log("MOUSE WAS CLICKED!!");
 	}
 }
@@ -170,8 +172,8 @@ else if (kb.released('down')) {
 }
 }
 function asteroidMovement() {
-	asteroidGroup.vel.x = asteroidSpeed;
-	asteroidGroup.vel.y = asteroidGoesStraight;
+	asteroidGroup.vel.x = ASTEROIDSPEED;
+	asteroidGroup.vel.y = ASTEROIDGOESSTRAIGHT;
 }
 
 /**SpawnBorders**/
@@ -210,6 +212,7 @@ function spaceshipHit(_asteroid,_spaceship) {
 	_asteroid.remove();
 	console.log("contact made");
 	lives--
+	crashParticles();
 }
 function spaceshipTouchesCoin() {
 	coinGroup.collides(spaceship,spaceshipCollectCoin);
@@ -231,7 +234,7 @@ function spaceshipCollectCoin(_coin,_spaceship) {
 function spawnCoin() {
 	coinSpawningChance = random(1,100);
 	coinSpawingLocationY = random(1,windowHeight);
-	if(coinSpawningChanceParameter>coinSpawningChance) {
+	if(COINSPAWNINGCHANCEPARAMETER>coinSpawningChance) {
 		coin = new Sprite(windowWidth+20, coinSpawingLocationY, 20, 'k' )
 		console.log("coin spawned");
 		coinGroup.add(coin);
@@ -277,18 +280,30 @@ function info() {
 // Returns: N/A
 /*****************************************************/
 
-
-	function gameStateChanger() {
-		if(gameStateChanged<1) {
-		for (var i = 0; i < Infinity; i++) {
-			console.log("u check");
-			if(lives <= 0) {
-				gameState = lose;
-				console.log("u lost");
-				gameStateChanged =1;
+function gameStateChanger() {
+	if(gameStateChanged<1) {
+		console.log("u check");
+		if(lives <= 0) {
+			gameState = "lose";
+			console.log("u lost");
+			gameStateChanged =1;
 			}
-	}
 }
+}
+
+function crashParticles() {
+	for(i=0; i<5; i++) {
+		particlesGroup = new Group();
+		particles = new Sprite(spaceship.x, spaceship.y, 10, 10, 'n');
+		
+		particles.color = "red";
+		particleMovementX = random(-5,5);
+		particleMovementY = random(-5,5);
+		particles.vel.x = particleMovementX;
+		particles.vel.y = particleMovementY;
+		particles.life = 30;
+		particlesGroup.add(particles);
+	}
 }
 /**************************************************** *
 *******************************************************/
