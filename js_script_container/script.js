@@ -12,6 +12,7 @@
 let gameState = "intro";
 let startImage;
 let startText;
+let asteroidModel;
 let clickedCounter = 0;
 let asteroidSpawingLocationY = 0;
 let borderSpawned = false;
@@ -86,9 +87,11 @@ function playState() {
 		}
 		spaceship.rotationSpeed = 0;
 		spaceship.rotation = 0;
+		asteroidGroup.rotationSpeed = 0;
+		asteroidGroup.rotation = 0;
 		spaceshipMovement();
 
-		//** Coding for Borders **/
+		//** Coding for Bodrers **/
 		if(borderSpawned == false) {
 			borders();
 			borderSpawned = true
@@ -104,6 +107,7 @@ function playState() {
 			asteroid = new Sprite(windowWidth+50,asteroidSpawingLocationY, 200, 'd')
 			asteroidGroup.add(asteroid)
 			asteroidSpawned = true;
+			asteroid.image = asteroidModel;
 		}
 		
 		asteroidDeleteParameter();
@@ -126,6 +130,8 @@ function playState() {
 }
 function preload() {
 	startText = loadImage('assets/start_image.png');
+	asteroidModel = loadImage('assets/AsteroidSkin.png');
+
 }
 
 //**  This website helped https://processing.org/reference/mousePressed_.html**//
@@ -287,15 +293,15 @@ function gameStateChanger() {
 			gameState = "lose";
 			console.log("u lost");
 			gameStateChanged =1;
+			sprite.remove();
 			}
-}
+	}
 }
 
 function crashParticles() {
 	for(i=0; i<5; i++) {
 		particlesGroup = new Group();
 		particles = new Sprite(spaceship.x, spaceship.y, 10, 10, 'n');
-		
 		particles.color = "red";
 		particleMovementX = random(-5,5);
 		particleMovementY = random(-5,5);
