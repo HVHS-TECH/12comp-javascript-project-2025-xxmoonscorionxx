@@ -27,6 +27,10 @@ let coinSpawingLocationY;
 let gameStateChanged = 0;
 let particleMovementX;
 let particleMovementY;
+let particlesSpawningAmount;
+let praticlesSpawningPart;
+let playtext1;
+let playtext2;
 /*******************************************************/
 //const container
 /*******************************************************/
@@ -138,7 +142,6 @@ function preload() {
 function mousePressed() {
 	if(mousePressed) {
 		clickedCounter = clickedCounter+CLICKCOUNTERINCREASE;
-		console.log("MOUSE WAS CLICKED!!");
 	}
 }
 
@@ -218,7 +221,8 @@ function spaceshipHit(_asteroid,_spaceship) {
 	_asteroid.remove();
 	console.log("contact made");
 	lives--
-	crashParticles();
+	determiner();
+	crashParticles(praticlesSpawningPart);
 }
 function spaceshipTouchesCoin() {
 	coinGroup.collides(spaceship,spaceshipCollectCoin);
@@ -271,8 +275,16 @@ function coinMovement() {
 /*****************************************************/
 function info() {
 	fill("#cbc83c");
-	text("Lives " + lives, 50, 50);
-	text("Score " + score, 50, 100);
+	if(playState == "play") {
+		playtext1 = "Lives " + lives;
+		playtext2 = "Score " + score;
+
+	} else if(playState == "intro" || playState == "lose") {
+		playtext1 = "";
+		playtext2 = "";
+	}
+	text(playtext1, 50, 50);
+	text(playtext2, 50, 100);
 }
 
 
@@ -288,7 +300,6 @@ function info() {
 
 function gameStateChanger() {
 	if(gameStateChanged<1) {
-		console.log("u check");
 		if(lives <= 0) {
 			gameState = "lose";
 			console.log("u lost");
@@ -298,8 +309,9 @@ function gameStateChanger() {
 	}
 }
 
-function crashParticles() {
-	for(i=0; i<5; i++) {
+function crashParticles(_particles) {
+	particlesSpawningAmount = _particles*5
+	for(i=0; i<particlesSpawningAmount; i++) {
 		particlesGroup = new Group();
 		particles = new Sprite(spaceship.x, spaceship.y, 10, 10, 'n');
 		particles.color = "red";
@@ -309,6 +321,23 @@ function crashParticles() {
 		particles.vel.y = particleMovementY;
 		particles.life = 30;
 		particlesGroup.add(particles);
+	}
+}
+function createEndBackground() {
+	endBackground = new Sprite(0,0,windowWidth,windowHeight, 's');
+}
+
+function determiner() {
+	if(lives == 1) {
+		praticlesSpawningPart = lives + 4;
+	} else if(lives == 2) {
+		praticlesSpawningPart = lives + 2;
+	} else if(lives == 3) {
+		praticlesSpawningPart = lives;
+	} else if(lives == 4) {
+		praticlesSpawningPart = lives -2;
+	} else if(lives == 5) {
+		praticlesSpawningPart = lives -4;
 	}
 }
 /**************************************************** *
