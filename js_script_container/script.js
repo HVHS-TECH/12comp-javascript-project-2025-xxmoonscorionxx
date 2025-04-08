@@ -128,6 +128,7 @@ function playState() {
 	}
 	else if(gameState == "lose") {
 		background('#0e001b');
+		endScreenText();
 
 		
 	}
@@ -249,7 +250,6 @@ function spawnCoin() {
 		console.log("coin spawned");
 		coinGroup.add(coin);
 		coinMovement();
-		
 	}
 	
 }
@@ -275,16 +275,10 @@ function coinMovement() {
 /*****************************************************/
 function info() {
 	fill("#cbc83c");
-	if(playState == "play") {
 		playtext1 = "Lives " + lives;
 		playtext2 = "Score " + score;
-
-	} else if(playState == "intro" || playState == "lose") {
-		playtext1 = "";
-		playtext2 = "";
-	}
-	text(playtext1, 50, 50);
-	text(playtext2, 50, 100);
+		text(playtext1, 50, 50);
+		text(playtext2, 50, 100);
 }
 
 
@@ -302,9 +296,10 @@ function gameStateChanger() {
 	if(gameStateChanged<1) {
 		if(lives <= 0) {
 			gameState = "lose";
-			console.log("u lost");
 			gameStateChanged =1;
-			sprite.remove();
+			spaceship.remove();
+			asteroidGroup.remove();
+			coinGroup.remove();
 			}
 	}
 }
@@ -321,6 +316,7 @@ function crashParticles(_particles) {
 		particles.vel.y = particleMovementY;
 		particles.life = 30;
 		particlesGroup.add(particles);
+		
 	}
 }
 function createEndBackground() {
@@ -339,6 +335,17 @@ function determiner() {
 	} else if(lives == 5) {
 		praticlesSpawningPart = lives -4;
 	}
+	
+}
+
+function endScreenText() {
+	fill("#cbc83c");
+	textSize(30)
+	text("YOUR SHIP HAS BEEN DESTROYED", windowWidth/2, 400);
+	text("SCORE " + score, windowWidth/2, 440);
+	textSize(10)
+	text("refresh the page to try again", windowWidth/2, 800);
+	textAlign(centre)
 }
 /**************************************************** *
 *******************************************************/
