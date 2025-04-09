@@ -13,6 +13,7 @@ let gameState = "intro";
 let startImage;
 let startText;
 let asteroidModel;
+let coinModel;
 let clickedCounter = 0;
 let asteroidSpawingLocationY = 0;
 let borderSpawned = false;
@@ -34,7 +35,7 @@ let playtext2;
 /*******************************************************/
 //const container
 /*******************************************************/
-const ASTEROIDSPAWNINGCHANCEPARAMETER = 4;
+const ASTEROIDSPAWNINGCHANCEPARAMETER = 3;
 const ASTEROIDSPEED = -10;
 const ASTEROIDGOESSTRAIGHT = 0;
 const CLICKCOUNTERINCREASE = 0.5;
@@ -108,10 +109,12 @@ function playState() {
 			asteroidMovement();
 		}
 		if(ASTEROIDSPAWNINGCHANCEPARAMETER>asteroidSpawningChance) {
-			asteroid = new Sprite(windowWidth+50,asteroidSpawingLocationY, 200, 'd')
+			asteroid = new Sprite(windowWidth+50,asteroidSpawingLocationY, 170, 'd')
 			asteroidGroup.add(asteroid)
 			asteroidSpawned = true;
 			asteroid.image = asteroidModel;
+			asteroid.image.offset.x = 130;
+			noSmooth();
 		}
 		
 		asteroidDeleteParameter();
@@ -135,7 +138,8 @@ function playState() {
 }
 function preload() {
 	startText = loadImage('assets/start_image.png');
-	asteroidModel = loadImage('assets/AsteroidSkin.png');
+	asteroidModel = loadImage('assets/asteroid.png');
+	coinModel = loadImage('assets/coin.png')
 
 }
 
@@ -247,9 +251,12 @@ function spawnCoin() {
 	coinSpawingLocationY = random(1,windowHeight);
 	if(COINSPAWNINGCHANCEPARAMETER>coinSpawningChance) {
 		coin = new Sprite(windowWidth+20, coinSpawingLocationY, 20, 'k' )
+		coin.image = coinModel;
+		noSmooth();
 		console.log("coin spawned");
 		coinGroup.add(coin);
 		coinMovement();
+		
 	}
 	
 }
@@ -335,17 +342,17 @@ function determiner() {
 	} else if(lives == 5) {
 		praticlesSpawningPart = lives -4;
 	}
-	
 }
 
 function endScreenText() {
 	fill("#cbc83c");
 	textSize(30)
-	text("YOUR SHIP HAS BEEN DESTROYED", windowWidth/2, 400);
-	text("SCORE " + score, windowWidth/2, 440);
+	text("YOUR SHIP HAS BEEN DESTROYED", windowWidth/2-300, 400);
+	text("SCORE " + score, windowWidth/2-300, 440);
 	textSize(10)
-	text("refresh the page to try again", windowWidth/2, 800);
+	text("refresh the page to try again", windowWidth/2-250, 800);
 	textAlign(centre)
+
 }
 /**************************************************** *
 *******************************************************/
