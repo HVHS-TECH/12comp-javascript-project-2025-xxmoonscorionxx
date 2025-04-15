@@ -15,6 +15,7 @@ let startText;
 let spaceshipModel;
 let asteroidModel;
 let coinModel;
+let banner;
 let clickedCounter = 0;
 let asteroidSpawingLocationY = 0;
 let borderSpawned = false;
@@ -51,11 +52,14 @@ function setup() {
 	coinGroup = new Group();
 	if (gameState == "intro") {
 		background('#0e001b');
-		startImage = new Sprite(900, 400, 200, 400, 's');
+		startImage = new Sprite(900, 500, 200, 400, 's');
 		startImage.image = startText;
+		startBanner = new Sprite(900, 200, 400, 60, 's')
+		startBanner.image = banner;
 	}
 	else if (gameState == "play") {
 		startImage = null;
+		startBanner = null;
 
 
 
@@ -86,6 +90,7 @@ function playState() {
 	else if (gameState == "instructions") {
 		background('#0e001b');
 		startImage.remove()
+		startBanner.remove()
 		instructionsText();
 		gameStateChanger2();
 
@@ -134,16 +139,17 @@ function preload() {
 	spaceshipModel = loadImage('assets/spaceshipImage.gif')
 	asteroidModel = loadImage('assets/asteroid.png');
 	coinModel = loadImage('assets/coin.png')
+	banner = loadImage('assets/banner.png')
 
 
 
 }
 
-//**  This website helped https://processing.org/reference/mousePressed_.html**//
 //******************* */
 // mousePressed()
 // Called by N/A
-// Adds to the click counter which is used to change the gameState
+// Adds to the click counter which is used to cha7nge the gameState
+// This website helped https://processing.org/reference/mousePressed.html
 //******************* */
 function mousePressed() {
 	if (mousePressed) {
@@ -438,7 +444,7 @@ function instructionsText() {
 	textSize(70);
 	text("INSTRUCTIONS", windowWidth/2 -280, 200);
 	textSize(30);
-	text("Use W, A, S, and D To Move Your Spaceship", windowWidth/2 -300, 400) ;
+	text("Use W, A, S, and D Or The Arrow Keys To Move Your Spaceship", windowWidth/2 -300, 400) ;
 	text("Collect Coins To Increase Your Score", windowWidth/2 -300, 440);
 	text("Dodge The Asteroids", windowWidth/2 -300, 480);
 	text("When Hit By An Asteroid You lose A Life", windowWidth/2 -300, 520);
